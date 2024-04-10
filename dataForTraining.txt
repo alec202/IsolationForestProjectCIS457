@@ -1,0 +1,2 @@
+IP_Address, Location, Number of times Clicked on AD, if they have VPN or not
+122.130.01.20,USA,5,0
