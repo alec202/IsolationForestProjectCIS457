@@ -5,7 +5,7 @@ import os
 
 def trainModelAndUpdateOuputFile():
     # get the info and column headers for this file.
-    df = pd.read_csv("dataForTraining.csv")
+    df = pd.read_csv("inputDataForTraining.csv")
     print(df)
     # select the columns we want to train based off of.
     anamolly_inputs = ["numberOfTimesClickedAD", "Vpn"]
@@ -33,7 +33,7 @@ def trainModelAndUpdateOuputFile():
     df['anomaly_value'] = IF_model.predict(dfWithAnoms)
     print(df.loc[:, ["IP_Address", "Location", "numberOfTimesClickedAD", "Vpn", 'anomaly_scores', 'anomaly_value'] ])
     print("current dataframe is")
-    df.to_csv("ModelWithPredictions.csv", index=False)
+    df.to_csv("outputModelWithPredictions.csv", index=False)
 
 
 
@@ -43,9 +43,9 @@ def trainModelAndUpdateOuputFile():
 
 def modify_data_at_indices(row: int, column: int, value):
     """Below is why we need the indices, it allows us to modify a specific indices values"""
-    df = pd.read_csv("dataForTraining.csv")
+    df = pd.read_csv("inputDataForTraining.csv")
     df.iloc[row, column] = value
-    df.to_csv("dataForTraining.csv", index=False)
+    df.to_csv("inputDataForTraining.csv", index=False)
     """End of modifying a specific indices values"""
 
 
