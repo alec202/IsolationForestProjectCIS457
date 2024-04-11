@@ -16,6 +16,16 @@ def upload_file():
     if file and file.filename.endswith('.csv'):
         filename = secure_filename(file.filename)
         file.save(os.path.join(os.getcwd(), filename))
+        #add the updated csv file information to training csv file
+        with open('inputDataForTraining.csv', 'a', newline= '') as file1:
+            with open(filename, 'r') as file2:
+                reader = csv.reader(file2)
+                next(reader)
+                for row in reader:
+                    file1.write('\n')
+                    file1.write(','.join(row))
+        #delete the uploaded file
+        os.remove(filename)
         return 'File uploaded successfully.', 200
     else:
         return 'Unsupported file type.', 400
@@ -35,4 +45,4 @@ def is_ip_in(ip):
         return any(ip == row[0] for row in reader)
 #Test the function
 if __name__ == '__main__':
-    login('8.8.4.1')
+    login('8.8.4.4')
