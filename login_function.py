@@ -16,11 +16,15 @@ def upload_file():
     if file and file.filename.endswith('.csv'):
         filename = secure_filename(file.filename)
         file.save(os.path.join(os.getcwd(), filename))
+
         #add the updated csv file information to training csv file
+        filenamecsv = f"{file.name}.csv"
+        print(file)
+        print(filenamecsv)
         with open('inputDataForTraining.csv', 'a', newline= '') as file1:
             with open(filename, 'r') as file2:
                 reader = csv.reader(file2)
-                next(reader)
+                # next(reader)
                 for row in reader:
                     file1.write('\n')
                     file1.write(','.join(row))
@@ -43,6 +47,7 @@ def is_ip_in(ip):
         reader = csv.reader(file)
         next(reader)
         return any(ip == row[0] for row in reader)
+
 #Test the function
 if __name__ == '__main__':
     login('8.8.4.4')
