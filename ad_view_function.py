@@ -10,9 +10,30 @@ def user():
     else:
         #ask user for info
         print("ip is not in list")
+        location = input("Enter your country location\n").upper()
+        vpn = input("Enter y/n if you have a VPN\n").lower()
+        if vpn == 'y':
+            vpn = 1
+        else:
+            vpn = 0
+        num_clicks = 0
+        df = pd.read_csv("inputDataForTraining.csv")
+        newUserData = {
+            'IP_Address': address,
+            'Location': location,
+            'numberOfTimesClickedAD': num_clicks,
+            'Vpn': vpn
+        }
+        # Create new row
+        new_row = pd.DataFrame([newUserData])
+        # add the row to the existing data frame
+        df = pd.concat([df, new_row], ignore_index=True)
+        # Write to the csv file
+        df.to_csv('inputDataForTraining.csv', index=False)
+
 
     while (1):
-        print("\nPlease choose a function")
+        print("\nPlease choose a command")
         command = input("View ad | Stay | Go back | Help\n")
         if (command == 'View ad'):
             #ad
