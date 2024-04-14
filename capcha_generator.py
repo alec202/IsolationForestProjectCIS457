@@ -17,7 +17,7 @@ def generate_captcha():
     #open the image
     image = Image.open('captcha.png')
     image.show()
-    print(random_str)
+    print(f"The capcha answer is: {random_str}")
     #get user input
     user_input = input('Enter the string: ')
     return True if user_input == random_str else False
