@@ -1,6 +1,10 @@
 import pandas as pd
 import seaborn as sns
 from sklearn.ensemble import IsolationForest
+# pip install pandas
+# pip install seaborn
+# pip install scikit-learn (required for the algorithms)
+
 import os
 
 def trainModelAndUpdateOuputFile():
@@ -17,7 +21,7 @@ def trainModelAndUpdateOuputFile():
     # of the trees. So if we run this model with the same fixed value and same data
     # and parameters then we should be able to get repeatable outputs. We can set this
     # to a random specific value like 42
-    IF_model = IsolationForest(contamination=0.1, random_state=42)
+    IF_model = IsolationForest(contamination=0.1, random_state=44)
     # we still haven't trained the model which is where the next line comes into play
     # this trains the model from our created data frame and trains it based off of our
     # anamollies we want to detect
@@ -44,7 +48,7 @@ def trainModelAndUpdateOuputFile():
 def modify_data_at_indices(row: int, column: int, value):
     """Below is why we need the indices, it allows us to modify a specific indices values"""
     df = pd.read_csv("inputDataForTraining.csv")
-    df.iloc[row, column] = value
+    df.iloc[row, column] += value
     df.to_csv("inputDataForTraining.csv", index=False)
     """End of modifying a specific indices values"""
 
@@ -52,5 +56,5 @@ def modify_data_at_indices(row: int, column: int, value):
 
 if __name__ == "__main__":
     trainModelAndUpdateOuputFile()
-    modify_data_at_indices(7, 1, "JAPAN")
+    modify_data_at_indices(7, 3, 100)
 
