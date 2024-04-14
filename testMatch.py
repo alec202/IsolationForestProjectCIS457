@@ -12,12 +12,12 @@ else:
 
 #Test 2
 if result2 is not False:
-    print(f"IP address was found at index {result}")
+    print(f"IP address was found at index {result2}")
 else:
     print("IP address not found")  
 
 #Test 3 
 if result3 is not False:
-    print(f"IP address was found at index {result}")
+    print(f"IP address was found at index {result3}")
 else:
     print("IP address not found")  
