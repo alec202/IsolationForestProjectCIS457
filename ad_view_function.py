@@ -1,10 +1,15 @@
 import pandas as pd
 import csv
+from random import randint
+from is_ip_trusted import is_ip_not_trusted
+from capcha_generator import generate_captcha
+from isolation_forest_function import trainModelAndUpdateOuputFile, modify_data_at_indices
 
 def user():
     previousCommand = " "
     address = input("Please enter your IP address\n")
-    if is_ip_in(address):
+    is_ip_already_stored = is_ip_in(address)
+    if is_ip_already_stored:
         #get info from csv
         print("ip is in list")
     else:
@@ -31,20 +36,30 @@ def user():
         # Write to the csv file
         df.to_csv('inputDataForTraining.csv', index=False)
 
-
+    index_ip_address_is_at = indexIpIsAt(address)
+    """if the user has a vpn we need to increment their score by 100 
+     so they become an outlier and will be displayed the captcha"""
     while (1):
         print("\nPlease choose a command")
         command = input("View ad | Stay | Go back | Help\n")
         if (command == 'View ad'):
+            if is_ip_already_stored:
+                # returns true if the ip is not trusted
+                ip_not_trusted = is_ip_not_trusted(address)
+                # if ip is not trusted we display the captcha
+                if ip_not_trusted:
+                    generate_captcha()
             #ad
-            print("showing ad")
+            pickAdd()
             previousCommand = "v"
         elif (command == 'Stay'):
             #stay
-            print("staying")
+            print("staying and interacting with the ad in a meaningful way")
             previousCommand = "s"
         elif (command == 'Go back'):
             #go back
+            """Gotta use a functino to incrememnt the number of clicks
+            for the correct corresponding scenario"""
             if (previousCommand == "v"):
                 changeScore(address, -0.10)
             elif (previousCommand == "s"):
@@ -54,6 +69,15 @@ def user():
         elif (command == 'Help'):
             #help
             print("Command list: \nView ad: type 'view ad' to see an ad \nStay: type 'stay' to stay on the ad page \nGo back: type 'go back' to go back")
+        is_ip_already_stored = True
+        trainModelAndUpdateOuputFile()
+
+def indexIpIsAt(address):
+    with open('inputDataForTraining.csv', 'r') as file:
+        reader = csv.reader(file)
+        for index, row in enumerate(reader):
+            if row[0] == address:
+                return index
 
 def is_ip_in(ip):
     with open('inputDataForTraining.csv', 'r') as file:
@@ -73,7 +97,27 @@ def changeScore(ip, value: float):
             counter = counter + 1
     df.iloc[counter, 4] = df.iloc[counter, 4] + value
     df.to_csv("outputModelWithPredictions.csv", index=False)
-    
+
+def pickAdd():
+    company_and_college_names = [
+        "Grand Valley State University",
+        "Best Buy",
+        "KMART",
+        "Meijer",
+        "Walmart",
+        "University of Michigan",
+        "Michigan State University",
+        "Apple",
+        "Walmart",
+        "Home Depot",
+        "Etsy"
+        "Marshalls",
+        "Celebration Cinema"
+    ]
+    random_index = randint(0, (len(company_and_college_names) - 1))
+    print(f"Displaying Ad from {company_and_college_names[random_index]}")
+
 
 if __name__ == "__main__":
+    print(indexIpIsAt("13.133.1.20"))
     user()

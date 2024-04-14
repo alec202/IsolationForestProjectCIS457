@@ -10,11 +10,11 @@ import os
 def trainModelAndUpdateOuputFile():
     # get the info and column headers for this file.
     df = pd.read_csv("inputDataForTraining.csv")
-    print(df)
+    # print(df)
     # select the columns we want to train based off of.
     anamolly_inputs = ["numberOfTimesClickedAD", "Vpn"]
-    print()
-    print(df[anamolly_inputs])
+    # print()
+    # print(df[anamolly_inputs])
     # create isolation forest model.
     # contamination is the percentage of outliers we're expecting
     # random_state allows us to control the random selection process for the splitting
@@ -35,13 +35,12 @@ def trainModelAndUpdateOuputFile():
     # create a column within our dataframe, df, that has the score given by the model.
     # -1 indicates an anomaly
     df['anomaly_value'] = IF_model.predict(dfWithAnoms)
-    print(df.loc[:, ["IP_Address", "Location", "numberOfTimesClickedAD", "Vpn", 'anomaly_scores', 'anomaly_value'] ])
-    print("current dataframe is")
+    # print(df.loc[:, ["IP_Address", "Location", "numberOfTimesClickedAD", "Vpn", 'anomaly_scores', 'anomaly_value'] ])
+    # print("current dataframe is")
     df.to_csv("outputModelWithPredictions.csv", index=False)
 
 
 
-    # we want to create a column that states if a row of data is an outlier or inlier
 
 
 
