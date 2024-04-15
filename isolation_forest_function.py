@@ -48,7 +48,7 @@ def modify_data_at_indices(row: int, column: int, value):
     """Below is why we need the indices, it allows us to modify a specific indices values"""
     df = pd.read_csv("inputDataForTraining.csv")
     df.iloc[row, column] += value
-    df.to_csv("inputDataForTraining.csv", index=False)
+    df.to_csv("inputDataForTraining.csv", index=False, lineterminator="\n")
     """End of modifying a specific indices values"""
 
 
