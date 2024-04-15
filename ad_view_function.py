@@ -8,7 +8,7 @@ from isolation_forest_function import trainModelAndUpdateOuputFile, modify_data_
 def user():
     previousCommand = " "
     address = input("Please enter your IP address\n")
-    is_ip_already_stored = True
+    is_ip_already_stored = is_ip_in(address)
     if is_ip_already_stored:
         #get info from csv
         print("ip is in list")
@@ -42,6 +42,7 @@ def user():
     """if the user has a vpn we need to increment their score by 100 
      so they become an outlier and will be displayed the captcha"""
     num_captchas_passed = 0
+    previousCommand = None
     while (1):
         print("\nPlease choose a command")
         command = input("View ad | Stay | Go back | Help\n").lower()
@@ -70,7 +71,7 @@ def user():
                 # If the IP was trusted, then we just display an ad like normal.
                 pickAdd()
             previousCommand = "v"
-        elif (command == 'stay' or command == 's'):
+        elif ((command == 'stay' or command == 's') and previousCommand is not None and previousCommand == "v"):
             #stay
             print("staying and interacting with the ad in a meaningful way")
             previousCommand = "s"
