@@ -40,7 +40,7 @@ def user():
     index_ip_address_is_at = indexIpIsAt(address)
     """if the user has a vpn we need to increment their score by 100 
      so they become an outlier and will be displayed the captcha"""
-    captchas_passed = 0
+    num_captchas_passed = 0
     while (1):
         print("\nPlease choose a command")
         command = input("View ad | Stay | Go back | Help\n")
@@ -58,16 +58,19 @@ def user():
                         #restart the loop
                     captcha_passed = generate_captcha()
                     # keep displaying a captcha until they successfully get one correct
-                    while not captcha_passed():
+                    while not captcha_passed:
                         print("\nCaptcha failed, try again\n")
                         captcha_passed = generate_captcha()
                     print("Captcha passed, view ad:\n")
+                    num_captchas_passed += 1
                     #ad
                     pickAdd()
                 else:
-                    # If the IP was trusted, then we just display an ad like normal
+                    # DON'T REMOVE THIS ELSE
+                    # If the IP was trusted, then we just display an ad like normal.
                     pickAdd()
             else:
+                # DON'T REMOVE THIS ELSE
                 # if we don't have any data on the IP then we should show them the AD.
                 pickAdd()
 
