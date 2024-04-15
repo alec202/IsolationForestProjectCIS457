@@ -44,8 +44,8 @@ def user():
     num_captchas_passed = 0
     while (1):
         print("\nPlease choose a command")
-        command = input("View ad | Stay | Go back | Help\n")
-        if (command == 'View ad'):
+        command = input("View ad | Stay | Go back | Help\n").lower()
+        if (command == 'view ad' or command == 'view' or command == 'v'):
             # returns true if the ip is not trusted
             ip_not_trusted = is_ip_not_trusted(address)
             # if ip is not trusted we display the captcha
@@ -70,23 +70,21 @@ def user():
                 # If the IP was trusted, then we just display an ad like normal.
                 pickAdd()
             previousCommand = "v"
-        elif (command == 'Stay'):
+        elif (command == 'stay' or command == 's'):
             #stay
             print("staying and interacting with the ad in a meaningful way")
             previousCommand = "s"
-        elif (command == 'Go back'):
+        elif (command == 'go back' or command == 'back' or command == 'b'):
             #go back
             """Gotta use a functino to incrememnt the number of clicks
             for the correct corresponding scenario"""
             if (previousCommand == "v"):
-                changeScore(address, -0.10)
-            elif (previousCommand == "s"):
-                changeScore(address, 0.10)
+                modify_data_at_indices(index_ip_address_is_at - 1, 2, 1)
             print("going back")
             previousCommand = "b"
-        elif (command == 'Help'):
+        elif (command == 'help' or command == 'h'):
             #help
-            print("Command list: \nView ad: type 'view ad' to see an ad \nStay: type 'stay' to stay on the ad page \nGo back: type 'go back' to go back")
+            print("Command list: \nView ad: type 'view ad', 'view', or 'v' to see an ad \nStay: type 'stay' or 's' to interact with the ad page \nGo back: type 'go back', 'back', or 'b' to go back")
         is_ip_already_stored = True
         trainModelAndUpdateOuputFile()
 
@@ -102,19 +100,6 @@ def is_ip_in(ip):
         reader = csv.reader(file)
         next(reader)
         return any(ip == row[0] for row in reader)
-        
-def changeScore(ip, value: float):
-    counter = 0
-    df = pd.read_csv("outputModelWithPredictions.csv")
-    with open('outputModelWithPredictions.csv', 'r') as file:
-        reader = csv.reader(file)
-        next(reader)
-        for row in reader:
-            if (ip == row[0]):
-                break
-            counter = counter + 1
-    df.iloc[counter, 4] = df.iloc[counter, 4] + value
-    df.to_csv("outputModelWithPredictions.csv", index=False)
 
 def pickAdd():
     company_and_college_names = [
@@ -137,5 +122,5 @@ def pickAdd():
 
 
 if __name__ == "__main__":
-    print(indexIpIsAt("13.133.1.20"))
+    #print(indexIpIsAt("13.133.1.20"))
     user()
