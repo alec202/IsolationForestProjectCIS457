@@ -76,7 +76,7 @@ def user():
             previousCommand = "s"
         elif (command == 'go back' or command == 'back' or command == 'b'):
             #go back
-            """Gotta use a functino to incrememnt the number of clicks
+            """Gotta use a functino to increment the number of clicks
             for the correct corresponding scenario"""
             if (previousCommand == "v"):
                 modify_data_at_indices(index_ip_address_is_at - 1, 2, 1)
