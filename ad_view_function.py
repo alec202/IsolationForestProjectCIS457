@@ -18,7 +18,8 @@ def user():
         location = input("Enter your country location\n").upper()
         vpn = input("Enter y/n if you have a VPN\n").lower()
         if vpn == 'y':
-            vpn = 1
+            # if they have a vpn, we will set vpn to an absurdly high value so they'll be detected
+            vpn = 100
         else:
             vpn = 0
         num_clicks = 0
@@ -39,6 +40,7 @@ def user():
     index_ip_address_is_at = indexIpIsAt(address)
     """if the user has a vpn we need to increment their score by 100 
      so they become an outlier and will be displayed the captcha"""
+    captchas_passed = 0
     while (1):
         print("\nPlease choose a command")
         command = input("View ad | Stay | Go back | Help\n")
@@ -48,9 +50,27 @@ def user():
                 ip_not_trusted = is_ip_not_trusted(address)
                 # if ip is not trusted we display the captcha
                 if ip_not_trusted:
-                    generate_captcha()
-            #ad
-            pickAdd()
+                    # if they appear to be a bot and still wasting our resources, yet they
+                    # passed our captcha more than 3 times, we should filter them out.
+                    if captchas_passed >= 3:
+                        print("This person is wasting our resources, won't display ad")
+                        continue
+                        #restart the loop
+                    captcha_passed = generate_captcha()
+                    # keep displaying a captcha until they successfully get one correct
+                    while not captcha_passed():
+                        print("\nCaptcha failed, try again\n")
+                        captcha_passed = generate_captcha()
+                    print("Captcha passed, view ad:\n")
+                    #ad
+                    pickAdd()
+                else:
+                    # If the IP was trusted, then we just display an ad like normal
+                    pickAdd()
+            else:
+                # if we don't have any data on the IP then we should show them the AD.
+                pickAdd()
+
             previousCommand = "v"
         elif (command == 'Stay'):
             #stay
