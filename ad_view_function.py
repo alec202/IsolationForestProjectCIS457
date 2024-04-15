@@ -8,7 +8,7 @@ from isolation_forest_function import trainModelAndUpdateOuputFile, modify_data_
 def user():
     previousCommand = " "
     address = input("Please enter your IP address\n")
-    is_ip_already_stored = is_ip_in(address)
+    is_ip_already_stored = True
     if is_ip_already_stored:
         #get info from csv
         print("ip is in list")
@@ -37,6 +37,7 @@ def user():
         # Write to the csv file
         df.to_csv('inputDataForTraining.csv', index=False)
 
+    trainModelAndUpdateOuputFile()
     index_ip_address_is_at = indexIpIsAt(address)
     """if the user has a vpn we need to increment their score by 100 
      so they become an outlier and will be displayed the captcha"""
@@ -45,35 +46,29 @@ def user():
         print("\nPlease choose a command")
         command = input("View ad | Stay | Go back | Help\n")
         if (command == 'View ad'):
-            if is_ip_already_stored:
-                # returns true if the ip is not trusted
-                ip_not_trusted = is_ip_not_trusted(address)
-                # if ip is not trusted we display the captcha
-                if ip_not_trusted:
-                    # if they appear to be a bot and still wasting our resources, yet they
-                    # passed our captcha more than 3 times, we should filter them out.
-                    if captchas_passed >= 3:
-                        print("This person is wasting our resources, won't display ad")
-                        continue
-                        #restart the loop
+            # returns true if the ip is not trusted
+            ip_not_trusted = is_ip_not_trusted(address)
+            # if ip is not trusted we display the captcha
+            if ip_not_trusted:
+                # if they appear to be a bot and still wasting our resources, yet they
+                # passed our captcha more than 3 times, we should filter them out.
+                if num_captchas_passed >= 3:
+                    print("This person is wasting our resources, won't display ad")
+                    continue
+                    #restart the loop
+                captcha_passed = generate_captcha()
+                # keep displaying a captcha until they successfully get one correct
+                while not captcha_passed:
+                    print("\nCaptcha failed, try again\n")
                     captcha_passed = generate_captcha()
-                    # keep displaying a captcha until they successfully get one correct
-                    while not captcha_passed:
-                        print("\nCaptcha failed, try again\n")
-                        captcha_passed = generate_captcha()
-                    print("Captcha passed, view ad:\n")
-                    num_captchas_passed += 1
-                    #ad
-                    pickAdd()
-                else:
-                    # DON'T REMOVE THIS ELSE
-                    # If the IP was trusted, then we just display an ad like normal.
-                    pickAdd()
+                print("Captcha passed, view ad:\n")
+                num_captchas_passed += 1
+                #ad
+                pickAdd()
             else:
                 # DON'T REMOVE THIS ELSE
-                # if we don't have any data on the IP then we should show them the AD.
+                # If the IP was trusted, then we just display an ad like normal.
                 pickAdd()
-
             previousCommand = "v"
         elif (command == 'Stay'):
             #stay
