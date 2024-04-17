@@ -6,7 +6,7 @@ if __name__ == '__main__':
         print("Please choose a function to stimulate")
         command = input("login | view ad | exit\n")
         if command == 'login':
-            print("Enter your IP address to login")
+            print("Enter your password to login")
             ip = input()
             login(ip)
         elif command == 'view ad':
