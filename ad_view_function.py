@@ -114,7 +114,7 @@ def pickAdd():
         "Apple",
         "Walmart",
         "Home Depot",
-        "Etsy"
+        "Etsy",
         "Marshalls",
         "Celebration Cinema"
     ]
